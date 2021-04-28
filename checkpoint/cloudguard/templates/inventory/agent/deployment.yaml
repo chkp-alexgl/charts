@@ -3,7 +3,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "agent.resource.name" $config }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   annotations:
     agentVersion: {{ $config.agentConfig.tag }}
   labels:
@@ -16,18 +16,18 @@ spec:
   template:
     metadata:
       annotations:
-{{ include "common.pod.annotations" $config | indent 8 }} 
+{{ include "common.pod.annotations" $config | indent 8 }}
       labels:
 {{ include "common.labels" $config | indent 8 }}
     spec:
-{{ include "common.pod.properties" $config | indent 6 }}    
+{{ include "common.pod.properties" $config | indent 6 }}   
       securityContext:
-        runAsUser: {{ include "cloudguard.nonroot.user" . }}
+        runAsUser: {{ include "cloudguard.nonroot.user" $config }}
       containers:
       # Main container
       - name: {{ $config.agentName }}
         image: {{ template "agent.main.image" $config }}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        imagePullPolicy: {{ $config.Values.imagePullPolicy }}
         volumeMounts:
         - name: secret-volume
           mountPath: /etc/secret-volume
@@ -45,4 +45,4 @@ spec:
       volumes:
       - name: secret-volume
         secret:
-          secretName: {{ .Release.Name }}-cp-cloudguard-creds
+          secretName: {{ $.Release.Name }}-cp-cloudguard-creds

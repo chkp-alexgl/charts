@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ template "agent.resource.name" $config }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   annotations:
     agentVersion: {{ $config.agentConfig.tag }}
   labels:
@@ -25,7 +25,7 @@ spec:
       # Main container
       - name: {{ $config.agentName }}
         image: {{ template "agent.main.image" $config }}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        imagePullPolicy: {{ $config.Values.imagePullPolicy }}
         securityContext:
           capabilities:
             add: [ "SYS_ADMIN", "SYS_RESOURCE", "NET_ADMIN" ]
@@ -40,7 +40,7 @@ spec:
         - mountPath: /etc/secret-volume
           name: secret-volume
         - mountPath: /etc/cpconfig
-          name: config-volume              
+          name: config-volume             
         command: ["/bin/sh"]
         args: ["-c", "/flow_logs_user"]
         {{- if $config.agentConfig.resources }}
@@ -52,7 +52,7 @@ spec:
       volumes:
       - name: secret-volume
         secret:
-          secretName: {{ .Release.Name }}-cp-cloudguard-creds
+          secretName: {{ $.Release.Name }}-cp-cloudguard-creds
       - name: netns-volume
         hostPath:
           path: /var/run/docker/netns

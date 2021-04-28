@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: {{ template "agent.resource.name" $config }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   annotations:
     agentVersion: {{ $config.agentConfig.tag }}
   labels:
@@ -28,7 +28,7 @@ spec:
       # Main container
       - name: {{ $config.agentName }}
         image: {{ template "agent.main.image" $config }}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        imagePullPolicy: {{ $config.Values.imagePullPolicy }}
         securityContext:
           allowPrivilegeEscalation: false
           capabilities:

@@ -1,11 +1,11 @@
 {{- $config := fromYaml (include "imagescan.daemon.config" .) -}}
 {{- if $config.featureConfig.enabled -}}
-{{- if .Values.rbac.pspEnabled -}}
+{{- if $config.Values.rbac.pspEnabled -}}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
   name: {{ template "agent.resource.name" $config }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "common.labels.with.chart" $config | indent 4 }}
 roleRef:
@@ -15,6 +15,6 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: {{ template "agent.service.account.name" $config }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
 {{- end -}}
 {{- end -}}

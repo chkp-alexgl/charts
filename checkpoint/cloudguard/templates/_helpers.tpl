@@ -10,8 +10,9 @@
 {{- /* The following templates are invoked with a per-agent 'config' object, containing:
         - .featureName (e.g., imagescan)
         - .agentName (e.g., daemon)
-        - .featureConfig (e.g., .Values.addons.imagescan)
-        - .agentConfig (e.g., .Values.addons.imagescan.daemon)
+        - .featureConfig (e.g.,.Values.addons.imagescan)
+        - .agentConfig (e.g.,.Values.addons.imagescan.daemon)
+        - .Values - content of provided defaults.yaml and values.yaml
     */ -}}
 {{- define "agent.full.name" -}}
 {{ printf "%s-%s" .featureName .agentName }}
@@ -87,7 +88,7 @@ tolerations:
 {{- end }}
 {{- if .Values.imageRegistry.authEnabled }}
 imagePullSecrets:
-- name: {{ .Release.Name }}-regcred
+- name: {{ $.Release.Name }}-regcred
 {{- end -}}
 {{- end -}}
 
@@ -106,7 +107,7 @@ imagePullSecrets:
 - name: CP_KUBERNETES_CLUSTER_ID
   valueFrom:
     configMapKeyRef:
-      name: {{ .Release.Name }}-cp-cloudguard-configmap
+      name: {{ $.Release.Name }}-cp-cloudguard-configmap
       key: clusterID
 - name: NAMESPACE_NAME
   valueFrom:
@@ -132,7 +133,7 @@ imagePullSecrets:
 - name: CP_KUBERNETES_CLUSTER_ID
   valueFrom:
     configMapKeyRef:
-      name: {{ .Release.Name }}-cp-cloudguard-configmap
+      name: {{ $.Release.Name }}-cp-cloudguard-configmap
       key: clusterID
 - name: CP_KUBERNETES_DOME9_URL
   value: {{ template "cloudguardURL_host" . }}
@@ -171,16 +172,16 @@ Header          Node-Name   ${NODE_NAME}
 Compress        gzip
 http_User       ${CP_KUBERNETES_USER}
 http_Passwd     ${CP_KUBERNETES_PASS}
-Port            443        
+Port            443       
 tls             On
 tls.verify      On
 {{- end -}}
- 
+
 {{- /* fluentbit configmap to send metric */ -}}
-{{- define "fluentbit-metric.conf" -}}	  
+{{- define "fluentbit-metric.conf" -}}	 
 [INPUT]
     Name            exec
-    Command         find {{ .metricPath }} -type f | xargs cat 
+    Command         find {{ .metricPath }} -type f | xargs cat
     Tag             metrics
     Buf_Size        8mb
     Interval_Sec    30
@@ -198,7 +199,7 @@ tls.verify      On
 # fluentbit
 - name: fluentbit
   image: {{ template "agent.fluentbit.image" . }}
-  imagePullPolicy: {{ .Values.imagePullPolicy }} 
+  imagePullPolicy: {{ .Values.imagePullPolicy }}
   securityContext:
     allowPrivilegeEscalation: false
   env:
@@ -223,7 +224,7 @@ e.g. imagescan-daemon.checkpoint
 */}}
 {{- define "generate.selfsigned.cert" -}}
 {{- $serverName := (include "agent.resource.name" .) -}}
-{{- $altNames := list $serverName ( printf "%s.%s" $serverName .Release.Namespace) ( printf "%s.%s.svc" $serverName .Release.Namespace) -}}
+{{- $altNames := list $serverName ( printf "%s.%s" $serverName $.Release.Namespace) ( printf "%s.%s.svc" $serverName $.Release.Namespace) -}}
 {{- $cert := genSelfSignedCert $serverName nil $altNames 3650 -}}
 crt: {{ $cert.Cert | b64enc }}
 key: {{ $cert.Key | b64enc }}
@@ -233,7 +234,7 @@ key: {{ $cert.Key | b64enc }}
   Return Dome9 subdomain in format xxN e.g. "eu1", "ap3" etc. For us* only return an empty string
 */}}
 {{- define "dome9.subdomain" -}}
-{{- $datacenter := lower $.Values.datacenter -}}
+{{- $datacenter := lower .Values.datacenter -}}
 {{- if has $datacenter (list "us" "us1" "usea1") -}}
 {{- printf "" -}}
 {{- else if has $datacenter (list "eu" "eu1" "euwe1") -}}
@@ -245,7 +246,7 @@ key: {{ $cert.Key | b64enc }}
 {{- else if has $datacenter (list "ap3" "apso1") -}}
 {{- printf "ap3" -}}
 {{- else -}}
-{{- $err := printf "\n\nERROR: Invalid datacenter: %s (should be one of: 'usea1' [default], 'euwe1', 'apse1', 'apse2', 'apso1')"  $.Values.datacenter -}}
+{{- $err := printf "\n\nERROR: Invalid datacenter: %s (should be one of: 'usea1' [default], 'euwe1', 'apse1', 'apse2', 'apso1')"  .Values.datacenter -}}
 {{- fail $err -}}
 {{- end -}}
 {{- end -}}
@@ -254,8 +255,8 @@ key: {{ $cert.Key | b64enc }}
   Return backend URL
 */}}
 {{- define "dome9.url" -}}
-{{- if $.Values.cloudguardURL -}}
-{{- printf "%s" $.Values.cloudguardURL -}}
+{{- if .Values.cloudguardURL -}}
+{{- printf "%s" .Values.cloudguardURL -}}
 {{- else -}}
 {{- $subdomain := (include "dome9.subdomain" .) -}}
 {{- if eq $subdomain "" -}}
@@ -279,3 +280,11 @@ key: {{ $cert.Key | b64enc }}
 {{- define "cloudguard.nonroot.user" -}}
 17112
 {{- end }}
+
+{{/*
+  Construct "root" context (dict) from defaults.yaml included in the chart and the effective .Values of the release (overriding defaults)
+*/}}
+{{- define "get.root" -}}
+{{- $defaults := (.Files.Get "defaults.yaml" | fromYaml ) }}
+{{- printf "%s" ((deepCopy . | mergeOverwrite (dict "Values" $defaults)) | toYaml) }}
+{{- end -}}

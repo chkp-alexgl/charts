@@ -4,7 +4,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: {{ template "agent.resource.name" $config }}-fluentbit
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "common.labels.with.chart" $config | indent 4 }}
 data:
@@ -23,12 +23,12 @@ data:
         Name             tail
         Path             /rp4c/profiling/profiling.log
         Tag              rp-profiling
-        
+       
     [INPUT]
         Name             tail
         Path             /rp4c/telemetry/telemetry.log
         Tag              rp-telemetry
-        
+       
     [OUTPUT]
         Match            rp-alert
         Uri              ${CP_KUBERNETES_RUNTIME_ALERT_URI}
@@ -38,12 +38,12 @@ data:
         Match            rp-profiling
         Uri              ${CP_KUBERNETES_RUNTIME_PROFILING_URI}
 {{ include "fluentbit-http-output-param.conf" . | indent 8 }}
-        
+       
     [OUTPUT]
         Match           rp-telemetry
         Uri             ${CP_KUBERNETES_RUNTIME_TELEMETRY_URI}
 {{ include "fluentbit-http-output-param.conf" . | indent 8 }}
-        
+       
 {{ $params := dict "metricPath" "/rp4c/metric" "agentVersion" $config.agentConfig.tag }}
 {{ include "fluentbit-metric.conf" $params | indent 4 }}
 

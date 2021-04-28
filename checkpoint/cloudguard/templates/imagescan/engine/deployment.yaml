@@ -4,7 +4,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ template "agent.resource.name" $config }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   annotations:
     agentVersion: {{ $config.agentConfig.tag }}
   labels:
@@ -31,7 +31,7 @@ spec:
       # Main container
       - name: {{ $config.agentName }}
         image: {{ template "agent.main.image" $config }}
-        imagePullPolicy: {{ .Values.imagePullPolicy }}
+        imagePullPolicy: {{ $config.Values.imagePullPolicy }}
         {{- if $config.agentConfig.resources }}
         resources:
 {{ toYaml $config.agentConfig.resources | indent 10 }}
@@ -56,13 +56,13 @@ spec:
         - name: NODE_AGENT_SELECTOR
           value: app.kubernetes.io/name={{ template "imagescan.daemon.resource.name" . }}
         - name: RELEASE_NAME
-          value: {{ .Release.Name }}
+          value: {{ $.Release.Name }}
         - name: CLOUDGUARD_REGION
           value: {{ include "dome9.subdomain" $config | default "us" }}
       volumes:
       - name: secret-volume
         secret:
-          secretName: {{ .Release.Name }}-cp-cloudguard-creds
+          secretName: {{ $.Release.Name }}-cp-cloudguard-creds
       - name: servercert-volume
         configMap:
           name: {{ template "imagescan.daemon.resource.name" . }}

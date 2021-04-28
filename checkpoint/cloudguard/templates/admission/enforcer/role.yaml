@@ -4,18 +4,18 @@ kind: Role
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ template "agent.resource.name" $config }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "common.labels.with.chart" $config | indent 4 }}
-rules: 
-  {{- if .Values.rbac.pspEnabled }}
+rules:
+  {{- if $config.Values.rbac.pspEnabled }}
   - apiGroups: [ "policy" ]
     resources: [ "podsecuritypolicies" ]
     verbs: [ "use"]
-    resourceNames: 
+    resourceNames:
     - {{ template "agent.resource.name" $config }}
   {{- end }}
-  - apiGroups: 
+  - apiGroups:
       - admissioncontrol.cloudguard.checkpoint.com
     resources:
       - detectionrules

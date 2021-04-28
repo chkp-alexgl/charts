@@ -5,7 +5,7 @@ metadata:
 
   {{- /* TODO: use naming convention, pass to agent code as ENV variable */}}
   name: cloudguard-enforcer-webhook
-  namespace: {{ .config.Release.Namespace }}
+  namespace: {{ $.Release.Namespace }}
   labels:
 {{ include "common.labels.with.chart" .config | indent 4 }}
 webhooks:
@@ -14,7 +14,7 @@ webhooks:
       service:
         name: {{ template "agent.resource.name" .config }}
         path: "/validate"
-        namespace: {{ .config.Release.Namespace }}
+        namespace: {{ $.Release.Namespace }}
       caBundle: {{ .crt }}
     rules:
       - operations: ["CREATE","UPDATE", "DELETE", "CONNECT"]
