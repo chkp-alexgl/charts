@@ -1,0 +1,25 @@
+{{- $config := fromYaml (include "inventory.updater.config" .) -}}
+{{- if $config.Values.rbac.pspEnabled -}}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "agent.resource.name" $config }}
+  namespace: {{ $.Release.Namespace }}
+  labels:
+{{ include "common.labels.with.chart" $config | indent 4 }}
+rules:
+
+- apiGroups: [ "", "apps" ]
+  resources: [ "*" ]
+  # resourceNames: [ "asset-mgmt-admission-enforcer", "asset-mgmt-admission-policy", "asset-mgmt-inventory-agent", "asset-mgmt-runtime-daemon", "asset-mgmt-runtime-policy", "asset-mgmt-flowlogs-daemon", "asset-mgmt-imagescan-daemon", "asset-mgmt-imagescan-engine", "asset-mgmt-admission-enforcer-fluentbit", "asset-mgmt-admission-policy-metrics", "asset-mgmt-cp-cloudguard-configmap", "asset-mgmt-runtime-daemon-fluentbit" ]
+  verbs: [ "*"]
+
+- apiGroups: [ "rbac.authorization.k8s.io" ]
+  resources: [ "roles", "rolebindings" ]
+  # resourceNames: [ "asset-mgmt-admission-enforcer", "asset-mgmt-admission-policy", "asset-mgmt-inventory-agent", "asset-mgmt-runtime-daemon", "asset-mgmt-runtime-policy", "asset-mgmt-flowlogs-daemon", "asset-mgmt-imagescan-daemon", "asset-mgmt-imagescan-engine", "asset-mgmt-admission-enforcer-fluentbit", "asset-mgmt-admission-policy-metrics", "asset-mgmt-cp-cloudguard-configmap", "asset-mgmt-runtime-daemon-fluentbit" ]
+  verbs: [ "get" ]
+
+- apiGroups: [ "" ]
+  resources: [ "secrets" ]
+  verbs: [ "list", "create", "get", "update" ]
+{{- end -}}

@@ -1,0 +1,39 @@
+{{- $config := fromYaml (include "inventory.updater.config" .) -}}
+{{- if $config.agetConfig.enabled -}}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ template "agent.resource.name" $config }}
+  namespace: {{ $.Release.Namespace }}
+  annotations:
+    agentVersion: {{ $config.agentConfig.tag }}
+  labels:
+{{ include "common.labels.with.chart" $config | indent 4 }}
+spec:
+  schedule: {{ $config.agentConfig.cronSchedule }}
+  jobTemplate:
+    metadata:
+      annotations:
+{{ include "common.pod.annotations" $config | indent 8 }}
+      labels:
+{{ include "common.labels" $config | indent 8 }}
+    spec:
+{{ include "common.pod.properties" $config | indent 6 }}
+      containers:
+      # Main container
+      - name: {{ $config.agentName }}
+        image: {{ template "agent.main.image" $config }}
+        imagePullPolicy: {{ $config.Values.imagePullPolicy }}
+        command: ["/bin/sh"]
+        args: ["-c", "/cgupdate.sh"]
+        {{- if $config.agentConfig.resources }}
+        resources:
+{{ toYaml $config.agentConfig.resources | indent 10 }}
+        {{- end }}
+        env:
+{{ include "common.env" $config | indent 8 }}
+        - name: CG_HELM_OPTIONS
+          value: "--debug --dry-run"
+      restartPolicy: Never
+      concurrencyPolicy: Forbid
+{{- end -}}

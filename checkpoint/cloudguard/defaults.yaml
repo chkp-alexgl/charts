@@ -77,6 +77,35 @@ inventory:
     tolerations: []
     affinity: {}
 
+  updater:
+    enabled: true
+    cronSchedule: "*/5 * * * *"
+
+    image: checkpoint/consec-inventory-updater
+    tag: 0.0.1
+
+    ## Specify existing service account name ("" to create)
+    serviceAccountName: ""
+
+    ## Extra environment variables passed to the container
+    env: []
+
+    ## Configure resource requests and limits
+    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    resources: {}
+      # limits:
+      #   cpu: 100m
+      #   memory: 20Mi
+      # requests:
+      #   cpu: 100m
+      #   memory: 20Mi
+
+    ## Configuration options for nodeSelector, tolerations and affinity for pod
+    ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/
+    nodeSelector: {}
+    tolerations: []
+    affinity: {}
+
 ### Addons configuration
 ### Each addon may be disabled
 addons:
