@@ -79,9 +79,9 @@ inventory:
 
   updater:
     enabled: true
-    cronSchedule: */5 * * * *
+    cronSchedule: "*/5 * * * *"
 
-    image: checkpoint/consec-inventory-updater
+    image: checkpoint/consec-cgboot
     tag: 0.0.1
 
     ## Specify existing service account name ("" to create)

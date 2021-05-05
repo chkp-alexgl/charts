@@ -191,7 +191,7 @@ tls.verify      On
     Uri             ${CP_KUBERNETES_METRIC_URI}
     Header          Agent-Version   {{ .agentVersion }}
     Header          Telemetry-Version  ${TELEMETRY_VERSION}
-{{ include "fluentbit-http-output-param.conf" . | indent 4 }}
+{{- include "fluentbit-http-output-param.conf" . | indent 4 }}
 {{- end -}}
 
 {{- /* fluentbit container for agents telemetry, do not use by agents sending alerts */ -}}

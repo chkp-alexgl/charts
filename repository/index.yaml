@@ -3,9 +3,9 @@ entries:
   cloudguard:
   - apiVersion: v2
     appVersion: 2.2.0
-    created: "2021-05-01T19:22:35.433738189Z"
+    created: "2021-05-06T00:01:14.5959137+03:00"
     description: A Helm chart for Check Point CloudGuard Workload Security
-    digest: e26d0f28d83862dc974e98d42c19f66ff2ca856999b4f577f5c13f747fd3bc28
+    digest: 48fefa4ab57a6cd3014fcc1a50ba45a40cf61bbf59030435a96296a7c1357cc5
     home: https://secure.dome9.com/v2/
     icon: https://secure.dome9.com/v2/assets/images/dome9/d9-logo-white.svg
     keywords:
@@ -29,7 +29,7 @@ entries:
     version: 2.2.0
   - apiVersion: v2
     appVersion: v2.0.9
-    created: "2021-05-01T19:22:35.431206037Z"
+    created: "2021-05-06T00:01:14.5819092+03:00"
     description: A Helm chart for Check Point CloudGuard Workload Security
     digest: 4e05cb8b1a89ffbdc9b36a9ee58ec81dca6c481d6f787becaa49ff855ae758ea
     home: https://secure.dome9.com/v2/
@@ -55,7 +55,7 @@ entries:
     version: 2.0.9
   - apiVersion: v2
     appVersion: v2.0.8
-    created: "2021-05-01T19:22:35.424052951Z"
+    created: "2021-05-06T00:01:14.5715339+03:00"
     description: A Helm chart for Check Point CloudGuard Workload Security
     digest: cb2e1e40c7e0e5de1b9434695a7dd418f371180e7a8d9fb74982c732c0b96073
     home: https://secure.dome9.com/v2/
@@ -81,7 +81,7 @@ entries:
     version: 2.0.8
   - apiVersion: v2
     appVersion: v1.3.2
-    created: "2021-05-01T19:22:35.420683524Z"
+    created: "2021-05-06T00:01:14.5603861+03:00"
     description: A Helm chart for Check Point CloudGuard Workload Security
     digest: 6942631a2c3e8c1b598eda26873da3613c72eb9134701c36832eff5b5217b666
     home: https://secure.dome9.com/v2/
@@ -107,7 +107,7 @@ entries:
     version: 2.0.7
   - apiVersion: v2
     appVersion: v1.3.1
-    created: "2021-05-01T19:22:35.417594212Z"
+    created: "2021-05-06T00:01:14.5444742+03:00"
     description: A Helm chart for Check Point CloudGuard Workload Security
     digest: e45ce436b872547b809bd542db9a3b4ff0c11296155481fb743a5cab655f9168
     home: https://secure.dome9.com/v2/
@@ -133,7 +133,7 @@ entries:
     version: 2.0.6
   - apiVersion: v2
     appVersion: v1.3.1
-    created: "2021-05-01T19:22:35.412628209Z"
+    created: "2021-05-06T00:01:14.5237497+03:00"
     description: A Helm chart for Check Point CloudGuard Workload Security
     digest: 41e2c93908df77b07252e70bfbf075a10692a1c0206155c1903072b6e4f4b647
     home: https://secure.dome9.com/v2/
@@ -159,7 +159,7 @@ entries:
     version: 2.0.5
   - apiVersion: v2
     appVersion: v1.3.1
-    created: "2021-05-01T19:22:35.405939561Z"
+    created: "2021-05-06T00:01:14.5033869+03:00"
     description: A Helm chart for Check Point CloudGuard Workload Security
     digest: f521fc840c94668bdfd7dbb5dac3247522a43e14bc7af9fba6041d5b59067ef2
     home: https://secure.dome9.com/v2/
@@ -185,7 +185,7 @@ entries:
     version: 2.0.4
   - apiVersion: v2
     appVersion: v1.3.1
-    created: "2021-05-01T19:22:35.4008719Z"
+    created: "2021-05-06T00:01:14.4938776+03:00"
     description: A Helm chart for Check Point CloudGuard Workload Security
     digest: 0e66c71e8837bde5d396ae5033d4ecff2a9ff477a1ecf9cf1044ff9f09bf7d93
     home: https://secure.dome9.com/v2/
@@ -211,7 +211,7 @@ entries:
     version: 2.0.3
   - apiVersion: v2
     appVersion: v1.3.1
-    created: "2021-05-01T19:22:35.397793382Z"
+    created: "2021-05-06T00:01:14.4802488+03:00"
     description: A Helm chart for Check Point CloudGuard Workload Security
     digest: c36e2f797ec63d2fa49cfd20345490fe61e0fb037801a320deb53fbd9b25c996
     home: https://secure.dome9.com/v2/
@@ -237,7 +237,7 @@ entries:
     version: 2.0.2
   - apiVersion: v2
     appVersion: v1.3.1
-    created: "2021-05-01T19:22:35.394243703Z"
+    created: "2021-05-06T00:01:14.4705201+03:00"
     description: A Helm chart for Check Point CloudGuard Workload Security
     digest: fbb05a4fa7606c3dfe5fa6cdd97979fa0f0249a74d2f111a5d50b707cf7a9334
     home: https://secure.dome9.com/v2/
@@ -261,4 +261,4 @@ entries:
     urls:
     - https://raw.githubusercontent.com/chkp-alexgl/charts/ea-autoupdate/repository/cloudguard-2.0.1.tgz
     version: 2.0.1
-generated: "2021-05-01T19:22:35.390957725Z"
+generated: "2021-05-06T00:01:14.4389338+03:00"
